@@ -10,6 +10,8 @@ RUN npm install --production
 
 COPY ${SERVICE_DIR}/ .
 
+COPY ${SERVICE_DIR}/ .
+
 EXPOSE 3000
 
 CMD ["node","index.js"]
