@@ -2,16 +2,16 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_REGISTRY = "your-dockerhub-username"
+        DOCKER_REGISTRY = "bhagya1304"
         IMAGE_TAG = "${BUILD_NUMBER}"
-        MANIFEST_REPO = "https://github.com/your-org/k8s-manifests.git"
+        MANIFEST_REPO = "https://github.com/bhagyalakshmi35023/microservice-project/k8s-manifests.git"
     }
 
     stages {
 
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/your-org/microservice-app.git'
+                git branch: 'main', url: 'https://github.com/bhagyalakshmi35023/microservice-project.git'
             }
         }
 
@@ -49,11 +49,11 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'github-credentials',
-                    usernameVariable: 'GIT_USER',
-                    passwordVariable: 'GIT_TOKEN'
+                    usernameVariable: 'Bhagya Lakshmi S',
+                    passwordVariable: 'Jayeshthango@7402'
                 )]) {
                     sh """
-                        git clone https://${GIT_USER}:${GIT_TOKEN}@github.com/your-org/k8s-manifests.git
+                        git clone https://${Bhagya Lakshmi S}:${Jayeshthango@7402}@github.com/bhagyalakshmi35023/k8s-manifests.git
                         cd k8s-manifests
                         sed -i 's|user-service:.*|user-service:${IMAGE_TAG}|g' k8s/user-service-deployment.yaml
                         sed -i 's|order-service:.*|order-service:${IMAGE_TAG}|g' k8s/order-service-deployment.yaml
