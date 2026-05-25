@@ -62,3 +62,35 @@ pipeline {
     }
 
 }
+
+stage('Update Manifest Repo') {
+
+    steps {
+
+        withCredentials([
+            usernamePassword(
+                credentialsId: 'github-credentials',
+                usernameVariable: 'GITHUB_USER',
+                passwordVariable: 'GITHUB_TOKEN'
+            )
+        ]) {
+
+            sh '''
+            git clone https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/bhagyalakshmi35023/microservice-gitops.git
+
+            cd microservice-gitops
+
+            sed -i "s|order-service:.*|order-service:${IMAGE_TAG}|g" order-service/deployment.yaml
+
+            git config user.email "jenkins@ci.com"
+            git config user.name "Jenkins"
+
+            git add .
+
+            git commit -m "Update order-service image to ${IMAGE_TAG}"
+
+            git push
+            '''
+        }
+    }
+}
