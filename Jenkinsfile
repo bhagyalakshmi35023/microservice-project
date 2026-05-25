@@ -16,34 +16,46 @@ pipeline {
         }
 
         stage('Build & Push - user-service') {
-            steps {
-                script {
-                    docker.withRegistry('', 'dockerhub-credentials') {
-                        def img = docker.build(
-                            "${DOCKER_REGISTRY}/user-service:${IMAGE_TAG}",
-                            "--build-arg SERVICE_DIR=service-a -f Dockerfile ."
-                        )
-                        img.push()
-                        img.push("latest")
-                    }
-                }
-            }
-        }
 
-        stage('Build & Push - order-service') {
-            steps {
-                script {
-                    docker.withRegistry('', 'dockerhub-credentials') {
-                        def img = docker.build(
-                            "${DOCKER_REGISTRY}/order-service:${IMAGE_TAG}",
-                            "--build-arg SERVICE_DIR=service-b -f Dockerfile ."
-                        )
-                        img.push()
-                        img.push("latest")
-                    }
-                }
-            }
+    steps {
+
+        withCredentials([
+            usernamePassword(
+                credentialsId: 'dockerhub-credentials',
+                usernameVariable: 'DOCKER_USER',
+                passwordVariable: 'DOCKER_PASS'
+            )
+        ]) {
+
+            sh '''
+            echo $DOCKER_PASS | docker login \
+            -u $DOCKER_USER \
+            --password-stdin
+
+            docker build \
+            -t ${DOCKER_REGISTRY}/user-service:${IMAGE_TAG} .
+
+            docker push \
+            ${DOCKER_REGISTRY}/user-service:${IMAGE_TAG}
+            '''
         }
+    }
+}
+
+        // stage('Build & Push - order-service') {
+        //     steps {
+        //         script {
+        //             docker.withRegistry('', 'dockerhub-credentials') {
+        //                 def img = docker.build(
+        //                     "${DOCKER_REGISTRY}/order-service:${IMAGE_TAG}",
+        //                     "--build-arg SERVICE_DIR=service-b -f Dockerfile ."
+        //                 )
+        //                 img.push()
+        //                 img.push("latest")
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Update K8s Manifests') {
             steps {
