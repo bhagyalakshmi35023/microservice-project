@@ -1,14 +1,12 @@
-ARG SERVICE_DIR
-
 FROM node:20-alpine
+
+ARG SERVICE_DIR
 
 WORKDIR /app
 
 COPY ${SERVICE_DIR}/package*.json ./
 
-RUN npm install --omit=dev
-
-COPY ${SERVICE_DIR}/ .
+RUN npm install production
 
 COPY ${SERVICE_DIR}/ .
 
