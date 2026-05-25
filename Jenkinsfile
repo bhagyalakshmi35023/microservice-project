@@ -49,11 +49,11 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'github-credentials',
-                    usernameVariable: 'Bhagya Lakshmi S',
-                    passwordVariable: 'Jayeshthango@7402'
+                    usernameVariable: 'GITHUB_USER',
+                    passwordVariable: 'GITHUB_TOKEN'
                 )]) {
                     sh """
-                        git clone https://${Bhagya Lakshmi S}:${Jayeshthango@7402}@github.com/bhagyalakshmi35023/k8s-manifests.git
+                        git clone https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/bhagyalakshmi35023/k8s-manifests.git
                         cd k8s-manifests
                         sed -i 's|user-service:.*|user-service:${IMAGE_TAG}|g' k8s/user-service-deployment.yaml
                         sed -i 's|order-service:.*|order-service:${IMAGE_TAG}|g' k8s/order-service-deployment.yaml
