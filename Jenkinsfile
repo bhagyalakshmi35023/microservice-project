@@ -42,20 +42,20 @@ pipeline {
     }
 }
 
-        // stage('Build & Push - order-service') {
-        //     steps {
-        //         script {
-        //             docker.withRegistry('', 'dockerhub-credentials') {
-        //                 def img = docker.build(
-        //                     "${DOCKER_REGISTRY}/order-service:${IMAGE_TAG}",
-        //                     "--build-arg SERVICE_DIR=service-b -f Dockerfile ."
-        //                 )
-        //                 img.push()
-        //                 img.push("latest")
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Build & Push - order-service') {
+            steps {
+                script {
+                    docker.withRegistry('', 'dockerhub-credentials') {
+                        def img = docker.build(
+                            "${DOCKER_REGISTRY}/order-service:${IMAGE_TAG}",
+                            "--build-arg SERVICE_DIR=service-b -f Dockerfile ."
+                        )
+                        img.push()
+                        img.push("latest")
+                    }
+                }
+            }
+        }
 
         stage('Update K8s Manifests') {
             steps {
