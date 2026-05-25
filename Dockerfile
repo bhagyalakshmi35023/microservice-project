@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY ${SERVICE_DIR}/package*.json ./
 
-RUN npm install --production
+RUN npm install --omit=dev
 
 COPY ${SERVICE_DIR}/ .
 
